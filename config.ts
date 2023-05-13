@@ -1,25 +1,15 @@
-import { Chain, createPublicClient, createWalletClient, http } from "viem";
+import { Chain, createPublicClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { sepolia } from "viem/chains";
 
 ///////////////////
 
 // Replace with your address to become eligible for the airdrops
-export const yourAddress = "0x855193BCbdbD346B423FF830b507CBf90ecCc90B"; // <--- Replace with your address
+export const yourAddress = "0x5eF593FF381b7d36028c795B51e138428d009C20"; // <--- Replace with your address
 
 ///////////////////
 
 export const devGroups = [
-  {
-    // Nouns DAO NFT Holders group : https://factory.sismo.io/groups-explorer?search=0x311ece950f9ec55757eb95f3182ae5e2
-    groupId: "0x311ece950f9ec55757eb95f3182ae5e2",
-    data: [
-      // your address is added here so you can test the airdrops
-      yourAddress,
-      "0x2b9b9846d7298e0272c61669a54f0e602aba6290",
-      "0xb01ee322c4f028b8a6bfcd2a5d48107dc5bc99ec",
-      "0x938f169352008d35e065F153be53b3D3C07Bcd90",
-    ],
-  },
   {
     // Gitcoin Passport group : https://factory.sismo.io/groups-explorer?search=0x1cde61966decb8600dfd0749bd371f12
     groupId: "0x1cde61966decb8600dfd0749bd371f12",
@@ -50,6 +40,21 @@ export const mumbaiFork = {
   },
 } as const satisfies Chain;
 
+export const sepoliaFork = {
+  id: 11155111,
+  name: "Fork Sepolia - Sismo",
+  network: "forkSepoliaSismo",
+  nativeCurrency: { name: "SepoliaETH", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["http://127.0.0.1:8545"],
+    },
+    public: {
+      http: ["http://127.0.0.1:8545"],
+    },
+  },
+} as const satisfies Chain;
+
 // The private key of the second account of the local anvil network
 // This account is used for this demo to allow the user to try it without connecting a wallet
 export const account = privateKeyToAccount(
@@ -60,6 +65,6 @@ export const account = privateKeyToAccount(
 // the public client is used to read data from the contract or the chain
 // the wallet client is used to send transactions to the contract
 export const publicClient = createPublicClient({
-  chain: mumbaiFork,
-  transport: http("http://127.0.0.1:8545"),
+  chain: sepolia,
+  transport: http(),
 });

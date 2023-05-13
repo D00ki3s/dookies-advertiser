@@ -10,13 +10,17 @@
     "register-root": "cast rpc anvil_impersonateAccount 0xCA0583A6682607282963d3E2545Cd2e75697C2bb --rpc-url http://localhost:8545 && ETH_FROM=0xCA0583A6682607282963d3E2545Cd2e75697C2bb cast send 0x5449Cc7A7E4024a7192d70c9Ce60Bb823993fd81 --unlocked --rpc-url http://localhost:8545 'registerRoot(uint256)'",
     "compute-tree": "npx ts-node script/tree/compute-tree.ts",
     "anvil": "anvil --fork-url https://rpc.ankr.com/polygon_mumbai --chain-id 5151110",
-    "deploy-local": "yarn deploy-airdrop-0-contract && yarn deploy-airdrop-1-contract && yarn deploy-airdrop-2-contract && yarn generate-abi",
+    "anvil:sepo": "anvil --fork-url https://rpc.sepolia.org/ --chain-id 11155111",
+    "deploy-local": "yarn deploy-dookies && yarn deploy-dookies-advertiser && yarn generate-abi",
+    "deploy-testnet": "yarn deploy-dookies-testnet && yarn generate-abi",
     "generate-abi": "script/bash/generate-abi.sh",
-    "deploy-airdrop-0-contract": "forge script DeployAirdropLevel0 --rpc-url http://localhost:8545 -vv --mnemonics 'test test test test test test test test test test test junk' --sender '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' --broadcast",
-    "deploy-airdrop-1-contract": "forge script DeployAirdropLevel1 --rpc-url http://localhost:8545 -vv --mnemonics 'test test test test test test test test test test test junk' --sender '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' --broadcast",
-    "deploy-airdrop-2-contract": "forge script DeployAirdropLevel2 --rpc-url http://localhost:8545 -vv --mnemonics 'test test test test test test test test test test test junk' --sender '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' --broadcast"
+    "deploy-dookies-advertiser": "forge script DeployDookiesAdvertiser --rpc-url http://localhost:8545/ -vv --mnemonics 'test test test test test test test test test test test junk' --sender '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' --broadcast",
+    "deploy-dookies": "forge script DeployDookies --rpc-url http://localhost:8545/ -vv --mnemonics 'test test test test test test test test test test test junk' --sender '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' --broadcast"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@sismo-core/hydra-s2": "^1.0.0",
     "@sismo-core/sismo-connect-react": "^0.0.13",
     "@types/node": "18.15.11",
@@ -25,16 +29,22 @@
     "axios": "^1.3.5",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
-    "ethers": "^5",
+    "ethers": "^6.3.0",
+    "framer-motion": "^10.12.10",
+    "multiparty": "^4.2.3",
     "next": "13.3.0",
+    "nft.storage": "^7.0.3",
     "nodemon": "^2.0.22",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
     "styled-components": "^5.3.9",
     "typescript": "5.0.4",
-    "viem": "^0.3.17"
+    "viem": "^0.3.17",
+    "web3.storage": "^4.5.4"
   },
   "devDependencies": {
+    "@types/multiparty": "^0.0.33",
     "@types/styled-components": "^5.1.26"
   }
 }

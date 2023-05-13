@@ -150,14 +150,14 @@ label {
 
 input {
   width: 500px;
-  height: 53px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 0 10px;
   font-size: 20px;
   font-family: "Roboto-Regular";
-  margin-bottom: 10px;
   color: white;
+  background-color: transparent;
+}
+form {
   background-color: transparent;
 }
 

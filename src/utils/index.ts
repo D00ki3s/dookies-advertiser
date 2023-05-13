@@ -9,12 +9,28 @@ import {
   parseEther,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { sepolia } from "viem/chains";
 
 declare global {
   interface Window {
     ethereum?: any;
   }
 }
+
+export const sepoliaFork = {
+  id: 11155111,
+  name: "Fork Sepolia - Sismo",
+  network: "forkSepoliaSismo",
+  nativeCurrency: { name: "SepoliaETH", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["http://127.0.0.1:8545"],
+    },
+    public: {
+      http: ["http://127.0.0.1:8545"],
+    },
+  },
+} as const satisfies Chain;
 
 export const mumbaiFork = {
   id: 5151110,
@@ -97,7 +113,7 @@ export const requestAccounts = async (): Promise<`0x${string}`> => {
 
   // give user fake fork tokens
   const walletClient = createWalletClient({
-    chain: mumbaiFork,
+    chain: sepolia,
     transport: http(),
     account,
   });
@@ -111,34 +127,42 @@ export const requestAccounts = async (): Promise<`0x${string}`> => {
 
 export const callContract = async ({
   contractAddress,
-  responseBytes,
+  args,
   abi,
   userChain,
   account,
   publicClient,
   walletClient,
+  method = "claimWithSismo",
+  type = "write",
+  value,
 }: {
   contractAddress: string;
-  responseBytes: string;
+  args: string[] | unknown[];
   abi: any;
   userChain: Chain;
   account: `0x${string}`;
   publicClient: PublicClient;
   walletClient: WalletClient;
+  method?: string;
+  value?: bigint;
+  type?: "write" | "read";
 }): Promise<string> => {
-  const txArgs = {
+  const writeTxArgs = {
     address: contractAddress as `0x${string}`,
     abi: abi,
-    functionName: "claimWithSismo", // call the claimWithSismo function
-    args: [responseBytes],
+    args,
+    functionName: method, // call the claimWithSismo function
     account: account,
     chain: userChain,
   };
 
   // simulate the call to the contract to get the error if the call reverts
-  await publicClient.simulateContract(txArgs);
+  await publicClient.simulateContract(writeTxArgs);
+
   // if the simulation call does not revert, send the tx to the contract
-  const txHash = await walletClient.writeContract(txArgs);
+  const txHash = await walletClient.writeContract(writeTxArgs);
+
   // wait for the tx to be mined
   const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
 
@@ -149,7 +173,7 @@ export const callContract = async ({
 
 export const signMessage = (account: string) => {
   return encodeAbiParameters(
-    [{ type: "address", name: "airdropAddress" }],
+    [{ type: "address", name: "advertiserAddress" }],
     [account as `0x${string}`]
   );
 };
@@ -186,3 +210,6 @@ export function handleVerifyErrors(e: any): any {
   }
   return returnedError;
 }
+
+export const dookiesContractAddress =
+  process.env.NEXT_PUBLIC_DOOKIES_ADDRESS ?? "0x1c2abbe65586e5d5ad704686c9966375a8298500";
