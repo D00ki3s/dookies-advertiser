@@ -69,6 +69,16 @@ const groups = [
   },
   { value: "0x7fa46f9ad7e19af6e039aa72077064a1", label: "ENS DAO Voter", colorScheme: "blue" },
   { value: "0x94bf7aea2a6a362e07e787a663271348", label: "ETH Whales", colorScheme: "gray" },
+  {
+    value: "0x3a03c9231f9b3811f71fd268a7c8b906",
+    label: "Sismo Lens Follwers",
+    colorScheme: "green",
+  },
+  {
+    value: "0xff7653240feecd7448150005a95ac86b",
+    label: "Uniswap Contributors",
+    colorScheme: "pink",
+  },
 ];
 
 function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
