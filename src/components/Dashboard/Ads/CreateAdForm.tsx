@@ -123,7 +123,6 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
       formData.append("url", data.url);
       formData.append("targetedGroups", data.targetedGroups.join("|"));
       formData.append("media", data.media[0]);
-      console.log({ budget: data.budget });
       const uploadedRes = await fetch("/api/upload", {
         method: "POST",
         body: formData,
