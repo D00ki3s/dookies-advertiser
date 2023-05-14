@@ -1,7 +1,7 @@
 import { KVMerkleTree, MerkleTreeData, SNARK_FIELD, buildPoseidon } from "@sismo-core/hydra-s2";
-import { devGroups } from "../../config";
 import { exec } from "child_process";
 import { encodePacked, stringToHex, toHex } from "viem";
+import { devGroups } from "../../config";
 
 export type OffchainGetAccountsTreeInputs = {
   groupId: string;
@@ -96,7 +96,7 @@ export class DevRegistryTreeReader {
 
     const encodedTimestamp =
       timestamp === "latest"
-        ? BigInt(stringToHex("latest", { size: 32 })) >> 128n
+        ? BigInt(stringToHex("latest", { size: 32 })) >> BigInt(128)
         : BigInt(timestamp);
 
     const groupSnapshotId = encodePacked(

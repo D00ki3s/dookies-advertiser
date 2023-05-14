@@ -22,13 +22,12 @@ import {
   NumberInputStepper,
   useToast,
 } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { transactions } from "../../../../broadcast/Dookies.s.sol/5151110/run-latest.json";
 import { abi } from "../../../../abi/Dookies.json";
 import { abi as ghoAbi } from "../../../../abi/GHO.json";
-import { abi as daiAbi } from "../../../../abi/DAI.json";
 import {
   PublicClient,
   WalletClient,
@@ -52,8 +51,25 @@ type Inputs = {
   title: string;
   description: string;
   budget: string;
+  url: string;
+  targetedGroups: string[];
   media: File[];
 };
+
+const groups = [
+  {
+    value: "0x311ece950f9ec55757eb95f3182ae5e2",
+    label: "Nouns DAO NFT Holder",
+    colorScheme: "red",
+  },
+  {
+    value: "0x1cde61966decb8600dfd0749bd371f12",
+    label: "Gitcoin Passport Holder",
+    colorScheme: "green",
+  },
+  { value: "0x7fa46f9ad7e19af6e039aa72077064a1", label: "ENS DAO Voter", colorScheme: "blue" },
+  { value: "0x94bf7aea2a6a362e07e787a663271348", label: "ETH Whales", colorScheme: "gray" },
+];
 
 function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,6 +78,7 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
   const toast = useToast();
@@ -103,6 +120,8 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("budget", data.budget);
+      formData.append("url", data.url);
+      formData.append("targetedGroups", data.targetedGroups.join("|"));
       formData.append("media", data.media[0]);
       console.log({ budget: data.budget });
       const uploadedRes = await fetch("/api/upload", {
@@ -142,10 +161,8 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
       });
 
       const ipfsPath = uploaded.cid.split("ipfs://")[1];
-      console.log({ ipfsPath });
       const metadataRes = await fetch("https://ipfs.io/ipfs/" + ipfsPath);
       const metadata = await metadataRes.json();
-      console.log({ metadata });
       const mediaUrl = "https://ipfs.io/ipfs/" + metadata.image.split("ipfs://")[1];
       const newAd: TAd = {
         name: data.title,
@@ -156,13 +173,13 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
           name: data.title,
           properties: {
             budget: data.budget,
+            url: data.url,
           },
         },
         owner: account,
         paused: false,
         storedValue: budget,
       };
-      console.log({ newAd });
       setAds((ads) => [...ads, newAd]);
       reset();
       toast({
@@ -211,6 +228,28 @@ function CreateAdForm({ isOpen, onOpen, onClose, setAds }: TCreateAdFormProps) {
               <FormLabel>Description</FormLabel>
               <FormHelperText mb={2}>{"The description of the add"}</FormHelperText>
               <Input type="textarea" {...register("description")} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>URL</FormLabel>
+              <FormHelperText mb={2}>{"The url of the add"}</FormHelperText>
+              <Input type="text" {...register("url")} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Groups</FormLabel>
+              <FormHelperText mb={2}>
+                {"The groups that you want to target with this add"}
+              </FormHelperText>
+              <Select
+                isMulti
+                {...register("targetedGroups")}
+                options={groups}
+                onChange={(opts) =>
+                  setValue(
+                    "targetedGroups",
+                    opts.map((opt) => opt.value)
+                  )
+                }
+              />
             </FormControl>
             <FormControl>
               <FormLabel>Media</FormLabel>

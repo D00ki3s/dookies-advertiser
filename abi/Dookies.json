@@ -150,6 +150,46 @@
   },
   {
     "inputs": [],
+    "name": "getAllAdCampaigns",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "adCreative",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedValue",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "paused",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Dookies.AdCampaign[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "isBookingOpen",
     "outputs": [
       {

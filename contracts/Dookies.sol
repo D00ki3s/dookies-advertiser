@@ -46,6 +46,10 @@ contract Dookies {
     owner = msg.sender;
   }
 
+  function getAllAdCampaigns() public view returns (AdCampaign[] memory) {
+    return adList;
+  }
+
   /// @dev register the AdCampaign --needs to be called by Advertiser wallet
   /// @dev will be called to create a new Ad Campaign
   function registerAdCampaign(

@@ -36,12 +36,13 @@ const nftStorage = new NFTStorage({ token: getNFTStorageToken() });
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const form = await parseForm(req);
-  console.log({ fields: form.fields, files: form.files.media });
   const title = form.fields.title[0];
   const description = form.fields.description[0];
   const budget = form.fields.budget[0];
   const ad = form.files.media[0];
   const name = ad.originalFilename;
+  const url = form.fields.url[0];
+  const targetedGroups = form.fields.targetedGroups[0].split("|");
   const adFile = new File([fs.readFileSync(ad.path)], name);
 
   const uploadedAd = await nftStorage.store({
@@ -50,6 +51,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     image: adFile,
     properties: {
       budget: budget,
+      targetedGroups: targetedGroups,
+      adUrl: url,
     },
   });
   return res.status(200).json({ cid: uploadedAd.url });

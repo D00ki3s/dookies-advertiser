@@ -6,7 +6,6 @@ import {
   createWalletClient,
   encodeAbiParameters,
   http,
-  parseEther,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
@@ -117,10 +116,6 @@ export const requestAccounts = async (): Promise<`0x${string}`> => {
     transport: http(),
     account,
   });
-  await walletClient.sendTransaction({
-    to: address,
-    value: parseEther("5"),
-  });
 
   return address;
 };
@@ -212,4 +207,4 @@ export function handleVerifyErrors(e: any): any {
 }
 
 export const dookiesContractAddress =
-  process.env.NEXT_PUBLIC_DOOKIES_ADDRESS ?? "0x1c2abbe65586e5d5ad704686c9966375a8298500";
+  process.env.NEXT_PUBLIC_DOOKIES_ADDRESS ?? "0x0b6698f5833D8E262E604afC8aDf6CaB2cED365b";
